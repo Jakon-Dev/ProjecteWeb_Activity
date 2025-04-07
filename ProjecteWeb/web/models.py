@@ -82,3 +82,77 @@ class Agent(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# ======================= MAPS ==========================
+
+class Map(models.Model):
+    id = models.CharField(max_length=120, primary_key=True)
+    name = models.CharField(max_length=120)
+    displayIcon = models.URLField(max_length=200, blank=True, null=True)
+    listViewIcon = models.URLField(max_length=200, blank=True, null=True)
+    listViewIconTall = models.URLField(max_length=200, blank=True, null=True)
+    splash = models.URLField(max_length=200, blank=True, null=True)
+    stylizedBackgroundImage = models.URLField(max_length=200, blank=True, null=True)
+    premierBackgroundImage = models.URLField(max_length=200, blank=True, null=True)
+    description = models.TextField(null=True, blank=True)
+    path = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+# ======================= MATCHES ==========================
+
+class Match(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    json_data = models.JSONField()
+    map = models.ForeignKey(Map, on_delete=models.CASCADE, related_name='matches')
+    red_result = models.IntegerField()
+    blue_result = models.IntegerField()
+    start_time = models.DateTimeField()
+    game_duration = models.TimeField()
+
+    def __str__(self):
+        return f"Match {self.id} on {self.map.name}"
+
+
+class MatchPlayer(models.Model):
+    player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches')
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='player_matches')
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='player_matches')
+    team = models.CharField(max_length=120)
+    hasWon = models.BooleanField(default=False)
+    score = models.IntegerField()
+    kills = models.IntegerField()
+    deaths = models.IntegerField()
+    assists = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.player.name} in match {self.match.id}"
+
+
+class MatchRound(models.Model):
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='rounds')
+    index = models.IntegerField()
+
+    roundResult = models.CharField(max_length=120, null=True, blank=True)
+    roundCeremony = models.CharField(max_length=120, null=True, blank=True)
+    roundResultCode = models.CharField(max_length=120, null=True, blank=True)
+
+    winner_team = models.CharField(max_length=120)
+    winnerSide = models.CharField(max_length=120)
+    loser = models.CharField(max_length=120)
+    loserSide = models.CharField(max_length=120)
+
+    bombPlanter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rounds_planted', null=True,
+                                    blank=True)
+    bombDefuser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rounds_defused', null=True,
+                                    blank=True)
+
+    plantRoundTime = models.CharField(max_length=120, null=True, blank=True)
+    defuseRoundTime = models.CharField(max_length=120, null=True, blank=True)
+    plantSite = models.CharField(max_length=1, null=True, blank=True)
+
+    def __str__(self):
+        return f"Round {self.round_number} of match {self.match.id}"
