@@ -2,27 +2,25 @@ import json
 from os import path
 from django.db import models
 
-
 # ======================= USERS ==========================
 
 class PlayerCard(models.Model):
     id = models.CharField(max_length=120, primary_key=True)
     name = models.CharField(max_length=120)
-
+    
     icon = models.URLField(max_length=200, blank=True, null=True)
     small_art = models.URLField(max_length=200, blank=True, null=True)
     wide_art = models.URLField(max_length=200, blank=True, null=True)
     large_art = models.URLField(max_length=200, blank=True, null=True)
-
+    
     def __str__(self):
         return self.name
-
-
+    
 class PlayerTitle(models.Model):
     id = models.CharField(max_length=120, primary_key=True)
     name = models.CharField(max_length=120)
     title = models.CharField(max_length=120)
-
+    
     def __str__(self):
         return self.name
 
@@ -37,7 +35,6 @@ class User(models.Model):
     def __str__(self):
         return f"{self.name}#{self.tag}"
 
-
 # ======================= AGENTS ==========================
 
 class AgentRole(models.Model):
@@ -45,35 +42,33 @@ class AgentRole(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField(null=True, blank=True)
     icon = models.TextField(null=True, blank=True)
-
+    
     def __str__(self):
         return self.name
-
 
 class AgentAbility(models.Model):
     name = models.CharField(max_length=120, primary_key=True)
     description = models.TextField(null=True, blank=True)
     icon = models.TextField(null=True, blank=True)
-
+        
     def __str__(self):
         return self.name
-
 
 class Agent(models.Model):
     id = models.CharField(max_length=120, primary_key=True)
     name = models.CharField(max_length=120)
     description = models.TextField(null=True, blank=True)
     developerName = models.CharField(max_length=120, null=True, blank=True)
-
+    
     icon = models.URLField(max_length=200, blank=True, null=True)
     icon_small = models.URLField(max_length=200, blank=True, null=True)
     bust_image = models.URLField(max_length=200, blank=True, null=True)
     full_image = models.URLField(max_length=200, blank=True, null=True)
     full_image_v2 = models.URLField(max_length=200, blank=True, null=True)
     background_image = models.URLField(max_length=200, blank=True, null=True)
-
+    
     role = models.ForeignKey(AgentRole, on_delete=models.CASCADE, blank=True, null=True)
-
+    
     ability1 = models.ForeignKey(AgentAbility, on_delete=models.CASCADE, related_name='ability1', null=True)
     ability2 = models.ForeignKey(AgentAbility, on_delete=models.CASCADE, related_name='ability2', null=True)
     grenade = models.ForeignKey(AgentAbility, on_delete=models.CASCADE, related_name='grenade', null=True)
@@ -82,7 +77,6 @@ class Agent(models.Model):
 
     def __str__(self):
         return self.name
-
 
 # ======================= MAPS ==========================
 
@@ -97,7 +91,6 @@ class Map(models.Model):
     premierBackgroundImage = models.URLField(max_length=200, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     path = models.CharField(max_length=200, blank=True, null=True)
-
     def __str__(self):
         return self.name
 
@@ -116,7 +109,6 @@ class Match(models.Model):
     def __str__(self):
         return f"Match {self.id} on {self.map.name}"
 
-
 class MatchPlayer(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches')
     match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='player_matches')
@@ -131,25 +123,22 @@ class MatchPlayer(models.Model):
     def __str__(self):
         return f"{self.player.name} in match {self.match.id}"
 
-
 class MatchRound(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='rounds')
     index = models.IntegerField()
-
+    
     roundResult = models.CharField(max_length=120, null=True, blank=True)
     roundCeremony = models.CharField(max_length=120, null=True, blank=True)
     roundResultCode = models.CharField(max_length=120, null=True, blank=True)
-
+    
     winner_team = models.CharField(max_length=120)
     winnerSide = models.CharField(max_length=120)
     loser = models.CharField(max_length=120)
     loserSide = models.CharField(max_length=120)
-
-    bombPlanter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rounds_planted', null=True,
-                                    blank=True)
-    bombDefuser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rounds_defused', null=True,
-                                    blank=True)
-
+    
+    bombPlanter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rounds_planted', null=True, blank=True)
+    bombDefuser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rounds_defused', null=True, blank=True)
+    
     plantRoundTime = models.CharField(max_length=120, null=True, blank=True)
     defuseRoundTime = models.CharField(max_length=120, null=True, blank=True)
     plantSite = models.CharField(max_length=1, null=True, blank=True)
