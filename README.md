@@ -3,6 +3,8 @@
 
 Aquest projecte és una aplicació web feta amb Django que utilitza la API no oficial de Valorant per obtenir informació sobre el joc i mostrar-la a través d'una petita visualització web amb autenticació d'usuari.
 
+https://github.com/Jakon-Dev/ProjecteWeb_Activity.git
+
 ## Models de la Base de Dades
 
 Els models es poden dividir en dues categories:
