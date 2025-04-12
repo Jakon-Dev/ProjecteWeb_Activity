@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 RUN poetry config virtualenvs.create false
 
 # Instal·lar només dependències de producció
-RUN poetry install --no-root --no-interaction --no-ansi
+RUN poetry install --no-root --no-dev --no-interaction --no-ansi
 
 # Copiem tot el projecte
 COPY . .
