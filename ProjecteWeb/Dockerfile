@@ -2,14 +2,24 @@ FROM python:3.11.9
 
 WORKDIR /app
 
+# Instal·lar pip i poetry
+RUN pip install --upgrade pip
 RUN pip install poetry
 
-COPY pyproject.toml poetry.lock ./
+# Copiem fitxers de dependències
+COPY pyproject.toml poetry.lock requirements.txt ./
 
+# Instal·lar dependències bàsiques amb pip per seguretat
+RUN pip install -r requirements.txt
+
+# Configurar Poetry per no crear virtualenv
+RUN poetry config virtualenvs.create false
+
+# Instal·lar només dependències de producció
+RUN poetry install --no-root --no-interaction --no-ansi
+
+# Copiem tot el projecte
 COPY . .
-
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi --no-root
 
 EXPOSE 8000
 
@@ -17,6 +27,3 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 CMD ["/entrypoint.sh"]
-
-# docker build -t webpage .
-# docker run -p 8000:8000 webpage
