@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Editar Comentario{% endblock %}
+
+{% block content %}
+<div class="container-dark mt-4" style="max-width: 800px; width: 100%;">
+    <div class="agent-info-card">
+        <div class="agent-info-header">
+            <h2 class="mb-0">Editar Comentario</h2>
+        </div>
+        <div class="agent-info-body">
+            <form action="{% url 'edit_agent_comment' comment.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="comment">Comentario:</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="5" required>{{ comment.comment }}</textarea>
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'agent_detail' comment.agent.id %}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

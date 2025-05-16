@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+
+{% block title %}Agent Roles - VALO-Stats{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/agents/agent_roles.css' %}">
+<div class="container-dark" style="max-width: 1200px; width: 100%;">
+    <h1 class="text-center mb-5">Agent Roles</h1>
+    
+    <div class="roles-grid">
+        {% for role in agent_roles %}
+        <div class="role-card">
+            <h2 class="role-title">
+                <div class="role-image-wrapper">
+                    {% if role.icon %}
+                    <img src="{{ role.icon }}" alt="{{ role.name }}" class="role-icon">
+                    {% else %}
+                    {% endif %}
+                </div>
+                {{ role.name }}
+            </h2>
+            <p class="role-description">{{ role.description|default:"No hay descripción disponible" }}</p>
+            <div class="mt-auto">
+                <a href="{% url 'role_agents' role.id %}" class="button w-100">See Agents</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <div class="alert-custom">
+                There are no roles available.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 
