@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Map, Agent, Match, MatchPlayer, PlayerCard, PlayerTitle, AgentRole, AgentAbility
+from .models import User, Map, Agent, Match, MatchPlayer, PlayerCard, PlayerTitle, AgentRole, AgentAbility, AgentComment
 from django.utils.html import format_html
 from django.urls import reverse
 
@@ -14,6 +14,7 @@ admin.site.register(PlayerCard)
 admin.site.register(PlayerTitle)
 admin.site.register(AgentRole)
 admin.site.register(AgentAbility)
+admin.site.register(AgentComment)
 
 
 
