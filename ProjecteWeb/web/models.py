@@ -1,6 +1,7 @@
 import json
 from os import path
 from django.db import models
+from django.contrib.auth.models import User as AuthUser
 
 # ======================= USERS ==========================
 
@@ -50,7 +51,6 @@ class AgentAbility(models.Model):
     name = models.CharField(max_length=120, primary_key=True)
     description = models.TextField(null=True, blank=True)
     icon = models.TextField(null=True, blank=True)
-        
     def __str__(self):
         return self.name
 
@@ -77,6 +77,15 @@ class Agent(models.Model):
 
     def __str__(self):
         return self.name
+
+class AgentComment(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(AuthUser, on_delete=models.CASCADE, related_name='agent_comments')
+    comment = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.name} commented on {self.agent.name}"
 
 # ======================= MAPS ==========================
 

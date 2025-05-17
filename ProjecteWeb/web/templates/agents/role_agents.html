@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Agents - VALO-Stats{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/agents/role_agents.css' %}">
+<div class="container-dark mt-4" style="max-width: 1200px; width: 100%;">
+    <div class="role-banner mb-5">
+        <h1 class="text-center role-title">{% if role %}{{ role.name }}{% else %}Agents{% endif %}</h1>
+        {% if role and role.description %}
+        <p class="text-center role-subtitle">{{ role.description }}</p>
+        {% endif %}
+    </div>
+    
+    <div class="agents-cards-grid">
+        {% for agent in agents %}
+        <div class="agent-card-container">
+            <div class="agent-card">
+                {% if agent.icon %}
+                <div class="agent-card-image">
+                    <img src="{{ agent.icon }}" class="agent-image-custom" alt="{{ agent.name }}">
+                </div>
+                {% endif %}
+                <div class="agent-card-content">
+                    <h2 class="agent-card-name">{{ agent.name }}</h2>
+                    <p class="agent-card-desc">{{ agent.description|truncatechars:120 }}</p>
+                    <div class="agent-card-action">
+                        <a href="{% url 'agent_detail' agent.id %}" class="button w-100">See Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <div class="alert-custom">
+                <i class="fas fa-info-circle me-2"></i>There are no agents available for this role.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-5">
+        <a href="{% url 'agents' %}" class="button" style="background-color: #2d3748;">
+            <i class="fas fa-arrow-left me-2"></i>Back to Roles
+        </a>
+    </div>
+</div>
+{% endblock %} 
