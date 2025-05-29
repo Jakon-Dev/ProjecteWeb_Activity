@@ -6,20 +6,32 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/agents/agent_details.css' %}">
 <div class="container-dark mt-4" style="max-width: 1200px; width: 100%;">
-    <div class="agent-profile-card">
+    <div class="agent-profile-card" vocab="https://schema.org/" typeof="Person">
+        <!-- RDFa META MARKUP -->
+        <meta property="name" content="{{ agent.name }}">
+        <meta property="description" content="{{ agent.description|default:"There is no description available" }}">
+        {% if agent.role %}
+            <meta property="jobTitle" content="{{ agent.role.name }}">
+        {% endif %}
+        {% if agent.full_image %}
+            <meta property="image" content="{{ agent.full_image }}">
+        {% endif %}
+
         <div class="agent-profile-header">
             <div class="agent-profile-image">
                 {% if agent.full_image %}
-                <img src="{{ agent.full_image }}" alt="{{ agent.name }}" class="agent-full-image">
+         ++       <img src="{{ agent.full_image }}" alt="{{ agent.name }}" class="agent-full-image" property="image">
                 {% endif %}
             </div>
             <div class="agent-profile-info">
-                <h1 class="agent-profile-name">{{ agent.name }}</h1>
+                <h1 class="agent-profile-name" property="name">{{ agent.name }}</h1>
                 <div class="agent-profile-role">
-                    <span class="agent-role-badge">{% if agent.role %}{{ agent.role.name }}{% else %}No role assigned{% endif %}</span>
+                    <span class="agent-role-badge" property="jobTitle">
+                        {% if agent.role %}{{ agent.role.name }}{% else %}No role assigned{% endif %}
+                    </span>
                 </div>
                 <div class="agent-profile-description">
-                    <p>{{ agent.description|default:"There is no description available" }}</p>
+                    <p property="description">{{ agent.description|default:"There is no description available" }}</p>
                 </div>
             </div>
         </div>
@@ -110,7 +122,7 @@
             {% endif %}
         </div>
         
-        <!-- Sección de comentarios -->
+        <!-- Comments Section -->
         <div class="agent-section-title">
             <i class="fas fa-comments me-2"></i>Comments
         </div>
@@ -136,7 +148,7 @@
                                         </button>
                                     </div>
                                     
-                                    <!-- Modal de confirmación para eliminar -->
+                                    <!-- Modal -->
                                     <div class="modal fade" id="deleteModal{{ comment.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ comment.id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -193,4 +205,4 @@
         <a href="javascript:history.back()" class="button" style="background-color: #2d3748;">Go Back</a>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}
